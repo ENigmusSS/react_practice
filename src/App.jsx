@@ -78,6 +78,7 @@ export const App = () => {
                   type="text"
                   className="input"
                   placeholder="Search"
+                  value={query}
                   onChange={event =>
                     setQuery(event.target.value.trim().toLowerCase())
                   }
@@ -139,6 +140,10 @@ export const App = () => {
                 data-cy="ResetAllButton"
                 href="#/"
                 className="button is-link is-outlined is-fullwidth"
+                onClick={() => {
+                  setQuery('');
+                  setUserFilter(0);
+                }}
               >
                 Reset all filters
               </a>
