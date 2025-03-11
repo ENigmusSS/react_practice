@@ -16,14 +16,19 @@ const productsFullList = productsFromServer.map(product => {
   return { ...product, category, user };
 });
 
-function prepareProducts(products, currentUserId) {
+function prepareProducts(products, currentUserId, query) {
   const res = [...products];
 
-  return res.filter(product => product.user.id === currentUserId);
+  return res.filter(
+    product =>
+      (!currentUserId || product.id === currentUserId) &&
+      (!query || product.name.trim().toLowerCase().includes(query)),
+  );
 }
 
 export const App = () => {
   const [userFilter, setUserFilter] = React.useState(0);
+  const [query, setQuery] = React.useState('');
 
   return (
     <div className="section">
@@ -70,7 +75,9 @@ export const App = () => {
                   type="text"
                   className="input"
                   placeholder="Search"
-                  value="qwe"
+                  onChange={event => {
+                    setQuery(event.target.value);
+                  }}
                 />
 
                 <span className="icon is-left">
@@ -79,11 +86,14 @@ export const App = () => {
 
                 <span className="icon is-right">
                   {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-                  <button
-                    data-cy="ClearButton"
-                    type="button"
-                    className="delete"
-                  />
+                  {!!query && (
+                    <button
+                      data-cy="ClearButton"
+                      type="button"
+                      className="delete"
+                      onClick={setQuery('')}
+                    />
+                  )}
                 </span>
               </p>
             </div>
